@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Remove signoz release and waiting suppression ending
+    kubernetes.core.helm:
+      name: my-signoz
+      release_namespace: default
+      state: absent
+      wait: true
+  - name: Remove k8s-infra release and waiting suppression ending
+    kubernetes.core.helm:
+      name: my-signoz-k8s-infra
+      release_namespace: default
+      state: absent
+      wait: true
+  - name: "remove kubernetes python package"
+    pip:
+      name: kubernetes
+      state: absent

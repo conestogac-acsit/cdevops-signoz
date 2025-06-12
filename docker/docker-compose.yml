@@ -1,0 +1,36 @@
+services:
+  otel-collector-docker:
+    image: signoz/signoz-otel-collector:latest
+    container_name: signoz-otel-collector-docker
+    command:
+      [
+        "--config=/etc/otel-collector-config.yaml",
+        "--feature-gates=-pkg.translator.prometheus.NormalizeName"
+      ]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-host,os.type=linux
+      - DOCKER_MULTI_NODE_CLUSTER=false
+      - LOW_CARDINAL_EXCEPTION_GROUPING=false
+    restart: on-failure
+    networks:
+      - signoz-net
+
+  logspout:
+    image: "gliderlabs/logspout:latest"
+    container_name: signoz-logspout
+    volumes:
+      - /etc/hostname:/etc/host_hostname:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: syslog+tcp://otel-collector-docker:2255
+    depends_on:
+      - otel-collector-docker
+    restart: on-failure
+    networks:
+    - signoz-net
+
+
+networks:
+  signoz-net:
+    name: signoz-net    

@@ -33,4 +33,5 @@ services:
 
 networks:
   signoz-net:
-    name: signoz-net    
+    name: signoz-net
+    enable_ipv6: false

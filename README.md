@@ -3,7 +3,7 @@ docker logs and hostmetrics for signoz
 
 ```bash
 git clone --recurse-submodules
-patch -p < patch.diff
+patch  signoz/deploy/docker/docker-compose.yaml  <patch.diff
 ```
 
 This is based on [the open telemetry docs](https://opentelemetry.io/docs/languages/python/getting-started/)

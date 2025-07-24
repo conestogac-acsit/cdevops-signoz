@@ -1,8 +1,9 @@
-# INFO8985_monolith
-otel for a python monolithic app
+# Docker-infra
+docker logs and hostmetrics for signoz
 
 ```bash
-ansible-playbook up.yml
+git clone --recurse-submodules
+patch  signoz/deploy/docker/docker-compose.yaml  <patch.diff
 ```
 
 This is based on [the open telemetry docs](https://opentelemetry.io/docs/languages/python/getting-started/)

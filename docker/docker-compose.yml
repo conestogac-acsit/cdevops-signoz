@@ -16,7 +16,8 @@ services:
     restart: on-failure
     networks:
       - signoz-net
-
+    ports:
+      - "4328:4328"
   logspout:
     image: "gliderlabs/logspout:latest"
     container_name: signoz-logspout

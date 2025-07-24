@@ -1,4 +1,11 @@
 receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4328
+        cors:
+          allowed_origins:
+            - "*"
   hostmetrics:
     collection_interval: 30s
     scrapers:
@@ -42,10 +49,16 @@ exporters:
 service:
   pipelines:
     logs:
-      receivers: [tcplog/docker]
+      receivers: [tcplog/docker, otlp]
       processors: [batch]
       exporters: [otlp]
     metrics/generic:
       receivers: [hostmetrics]
       processors: [resourcedetection, batch]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      exporters: [otlp]
+    traces:
+      receivers: [otlp]
       exporters: [otlp]

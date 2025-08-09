@@ -1,20 +1,4 @@
 receivers:
-  otlp:
-    protocols:
-      http:
-        endpoint: 0.0.0.0:4328
-        cors:
-          allowed_origins:
-            - "*"
-  hostmetrics:
-    collection_interval: 30s
-    scrapers:
-      cpu: {}
-      load: {}
-      memory: {}
-      disk: {}
-      filesystem: {}
-      network: {}
   tcplog/docker:
     listen_address: "0.0.0.0:2255"
     operators:
@@ -42,23 +26,13 @@ processors:
     timeout: 2s
 exporters:
   otlp:
-    endpoint: otel-collector:4317
+    endpoint: 10.172.27.6:4317
     tls:
       insecure: true
 
 service:
   pipelines:
     logs:
-      receivers: [tcplog/docker, otlp]
+      receivers: [tcplog/docker]
       processors: [batch]
-      exporters: [otlp]
-    metrics/generic:
-      receivers: [hostmetrics]
-      processors: [resourcedetection, batch]
-      exporters: [otlp]
-    metrics:
-      receivers: [otlp]
-      exporters: [otlp]
-    traces:
-      receivers: [otlp]
       exporters: [otlp]

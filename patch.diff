@@ -1,34 +1,8 @@
-diff --git a/deploy/docker/docker-compose.yaml b/deploy/docker/docker-compose.yaml
-index 7bc052176..dea0d9606 100644
---- a/deploy/docker/docker-compose.yaml
-+++ b/deploy/docker/docker-compose.yaml
-@@ -47,7 +47,7 @@ x-zookeeper-defaults: &zookeeper-defaults
-   healthcheck:
-     test:
-       - CMD-SHELL
--      - curl -s -m 2 http://localhost:8080/commands/ruok | grep error | grep null
-+      - curl -s -m 2 http://localhost:8085/commands/ruok | grep error | grep null
-     interval: 30s
-     timeout: 5s
-     retries: 3
-@@ -115,7 +115,7 @@ services:
-     command:
-       - --config=/root/config/prometheus.yml
-     ports:
--      - "8080:8080" # signoz port
-+      - "8085:8080" # signoz port
-     #   - "6060:6060"     # pprof port
-     volumes:
-       - ../common/signoz/prometheus.yml:/root/config/prometheus.yml
-@@ -137,7 +137,7 @@ services:
-         - wget
-         - --spider
-         - -q
--        - localhost:8080/api/v1/health
-+        - localhost:8085/api/v1/health
-       interval: 30s
-       timeout: 5s
-       retries: 3
+Submodule signoz contains modified content
+diff --git a/signoz/deploy/docker/docker-compose.yaml b/signoz/deploy/docker/docker-compose.yaml
+index 39de8fa5a..3f7ade91c 100644
+--- a/signoz/deploy/docker/docker-compose.yaml
++++ b/signoz/deploy/docker/docker-compose.yaml
 @@ -187,6 +187,7 @@ services:
  networks:
    signoz-net:

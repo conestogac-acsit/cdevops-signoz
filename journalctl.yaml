@@ -1,0 +1,37 @@
+receivers:
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      cpu: {}
+      disk: {}
+      filesystem: {}
+      memory: {}
+      network: {}
+      paging: {}
+      load: {}
+  journald:
+    directory: /var/log/journal
+
+processors:
+  batch:
+  # Add the resourcedetection processor to automatically enrich logs
+  # with host-level metadata like hostname and IP address.
+  resourcedetection:
+    detectors: [system,env]
+    system:
+      hostname_sources: [os] # Detect hostname from the operating system
+
+exporters:
+  otlphttp:
+    endpoint: "https://upstream.listener:443" # Replace with your endpoint, make sure that it is listenning for otlp over http and that cors is set up properly
+
+service:
+  pipelines:
+    metrics:
+      receivers: [hostmetrics]
+      processors: [resourcedetection, batch]
+      exporters: [otlphttp]
+    logs:
+      receivers: [journald]
+      processors: [resourcedetection, batch]
+      exporters: [otlphttp]
